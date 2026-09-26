@@ -1,49 +1,118 @@
 package org.example.project
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
-
+import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import kotlinproject.shared.generated.resources.Res
-import kotlinproject.shared.generated.resources.compose_multiplatform
+import kotlinproject.shared.generated.resources.catalog_title
+import kotlinproject.shared.generated.resources.dark_theme
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+    val repository = remember { MockMoleculeRepository() }
+    var darkTheme by remember { mutableStateOf(false) }
+
+    val configuration = remember {
+        SavedStateConfiguration {
+            serializersModule = SerializersModule {
+                polymorphic(NavKey::class) {
+                    subclass(Route.List::class, Route.List.serializer())
+                    subclass(Route.Detail::class, Route.Detail.serializer())
                 }
             }
+        }
+    }
+
+    val backStack = rememberNavBackStack(configuration, Route.List)
+
+    MoleculeCatalogTheme(darkTheme = darkTheme) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(Res.string.catalog_title)) },
+                    actions = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(stringResource(Res.string.dark_theme))
+                            Switch(
+                                checked = darkTheme,
+                                onCheckedChange = { darkTheme = it },
+                            )
+                        }
+                    },
+                )
+            },
+        ) { contentPadding ->
+            NavDisplay(
+                backStack = backStack,
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                onBack = {
+                    if (backStack.size > 1) {
+                        backStack.removeLastOrNull()
+                    }
+                },
+                transitionSpec = {
+                    (slideInHorizontally { width -> width / 4 } + fadeIn()) togetherWith
+                        (slideOutHorizontally { width -> -width / 8 } + fadeOut())
+                },
+                popTransitionSpec = {
+                    (slideInHorizontally { width -> -width / 4 } + fadeIn()) togetherWith
+                        (slideOutHorizontally { width -> width / 8 } + fadeOut())
+                },
+                entryProvider = entryProvider {
+                    entry<Route.List> {
+                        CatalogScreen(
+                            state = CatalogState(
+                                molecules = repository.getMolecules(),
+                            ),
+                            onMoleculeClick = { id ->
+                                backStack.add(Route.Detail(id))
+                            },
+                        )
+                    }
+
+                    entry<Route.Detail> { route ->
+                        MoleculeDetailScreen(
+                            molecule = repository.getMolecule(route.id),
+                            onBack = {
+                                backStack.removeLastOrNull()
+                            },
+                        )
+                    }
+                },
+            )
         }
     }
 }

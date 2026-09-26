@@ -1,0 +1,11 @@
+<resources>
+    <string name="catalog_title">Каталог молекул</string>
+    <string name="library_title">Молекулярная библиотека</string>
+    <string name="entries_in_catalog">записей в наборе</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="back">Назад</string>
+    <string name="molecule_not_found">Молекула не найдена</string>
+    <string name="formula">Формула</string>
+    <string name="molecular_weight">Молекулярная масса</string>
+    <string name="molecular_properties">Свойства молекулы</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="catalog_title">Molecule catalog</string>
+    <string name="library_title">Molecule library</string>
+    <string name="entries_in_catalog">records in this set</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="back">Back</string>
+    <string name="molecule_not_found">Molecule not found</string>
+    <string name="formula">Formula</string>
+    <string name="molecular_weight">Molecular weight</string>
+    <string name="molecular_properties">Molecular properties</string>
+</resources>
