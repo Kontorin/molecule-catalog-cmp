@@ -20,6 +20,10 @@ compose.desktop {
     application {
         mainClass = "org.example.project.MainKt"
 
+        providers.gradleProperty("appLanguage").orNull?.let { language ->
+            jvmArgs += "-Duser.language=$language"
+        }
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.example.project"
