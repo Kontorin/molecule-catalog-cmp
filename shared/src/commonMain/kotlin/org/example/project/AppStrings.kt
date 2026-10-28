@@ -8,7 +8,7 @@ import org.jetbrains.compose.resources.stringResource
 
 internal val LocalAppLanguage = staticCompositionLocalOf { "" }
 
-// Recreate only the string resource state when the desktop locale changes.
+// Recreate only the string resource state when the app locale changes.
 @Composable
 internal fun appStringResource(resource: StringResource): String =
     key(LocalAppLanguage.current) {
