@@ -22,11 +22,14 @@ import kotlinproject.shared.generated.resources.formula
 import kotlinproject.shared.generated.resources.molecular_properties
 import kotlinproject.shared.generated.resources.molecular_weight
 import kotlinproject.shared.generated.resources.molecule_not_found
+import kotlinproject.shared.generated.resources.parent_molecule
+import kotlinproject.shared.generated.resources.no_parent_molecule
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MoleculeDetailScreen(
     state: MoleculeDetailState,
+    onMoleculeClick: (String) -> Unit,
     onBack: () -> Unit,
 ) {
     val molecule = state.molecule
@@ -74,6 +77,27 @@ fun MoleculeDetailScreen(
                     Text(
                         text = "${stringResource(Res.string.molecular_weight)}: ${molecule.molecule_properties.full_mwt} Da",
                     )
+                }
+            }
+            Text(
+                text = stringResource(Res.string.parent_molecule),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            val parent = state.parentMolecule
+            if (parent == null) {
+                Text(stringResource(Res.string.no_parent_molecule))
+            } else {
+                Card(
+                    onClick = { onMoleculeClick(parent.molecule_chembl_id) },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(parent.pref_name, style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = parent.molecule_chembl_id,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
             }
         }

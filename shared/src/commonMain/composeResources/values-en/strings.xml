@@ -10,4 +10,6 @@
     <string name="molecular_properties">Molecular properties</string>
     <string name="search_by_name">Search by name</string>
     <string name="nothing_found">Nothing found</string>
+    <string name="parent_molecule">Parent compound</string>
+    <string name="no_parent_molecule">No separate parent record in the catalog</string>
 </resources>

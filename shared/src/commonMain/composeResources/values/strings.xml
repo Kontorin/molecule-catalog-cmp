@@ -10,4 +10,6 @@
     <string name="molecular_properties">Свойства молекулы</string>
     <string name="search_by_name">Поиск по названию</string>
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="parent_molecule">Родительское соединение</string>
+    <string name="no_parent_molecule">Отдельной родительской записи в каталоге нет</string>
 </resources>

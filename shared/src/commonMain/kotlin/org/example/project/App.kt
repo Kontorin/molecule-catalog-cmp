@@ -116,6 +116,9 @@ fun App() {
                         }
                         MoleculeDetailScreen(
                             state = detailViewModel.state,
+                            onMoleculeClick = { id ->
+                                backStack.add(Route.Detail(id))
+                            },
                             onBack = {
                                 backStack.removeLastOrNull()
                             },
