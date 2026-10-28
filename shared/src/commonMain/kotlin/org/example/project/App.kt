@@ -23,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
@@ -40,7 +42,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun App() {
     val repository = remember { MockMoleculeRepository() }
-    val catalogViewModel = viewModel { CatalogViewModel(repository) }
     var darkTheme by remember { mutableStateOf(false) }
 
     val configuration = remember {
@@ -79,6 +80,10 @@ fun App() {
         ) { contentPadding ->
             NavDisplay(
                 backStack = backStack,
+                entryDecorators = listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator(),
+                ),
                 modifier = Modifier.fillMaxSize().padding(contentPadding),
                 onBack = {
                     if (backStack.size > 1) {
@@ -95,6 +100,7 @@ fun App() {
                 },
                 entryProvider = entryProvider {
                     entry<Route.List> {
+                        val catalogViewModel = viewModel { CatalogViewModel(repository) }
                         CatalogScreen(
                             state = catalogViewModel.state,
                             onQueryChange = catalogViewModel::onQueryChange,
@@ -105,8 +111,11 @@ fun App() {
                     }
 
                     entry<Route.Detail> { route ->
+                        val detailViewModel = viewModel {
+                            MoleculeDetailViewModel(repository, route.id)
+                        }
                         MoleculeDetailScreen(
-                            molecule = repository.getMolecule(route.id),
+                            state = detailViewModel.state,
                             onBack = {
                                 backStack.removeLastOrNull()
                             },

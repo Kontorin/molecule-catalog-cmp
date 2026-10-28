@@ -26,9 +26,10 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MoleculeDetailScreen(
-    molecule: Molecule?,
+    state: MoleculeDetailState,
     onBack: () -> Unit,
 ) {
+    val molecule = state.molecule
     Column(
         modifier = Modifier
             .fillMaxSize()
