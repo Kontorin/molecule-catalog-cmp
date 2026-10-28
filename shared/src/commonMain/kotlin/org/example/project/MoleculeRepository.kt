@@ -13,7 +13,7 @@ class MockMoleculeRepository : MoleculeRepository {
 
     override fun getParentMolecule(id: String): Molecule? {
         val molecule = getMolecule(id) ?: return null
-        val parentId = molecule.molecule_hierarchy.parent_chembl_id
+        val parentId = molecule.molecule_hierarchy.parentChemblId
         if (parentId == id) return null
         return getMolecule(parentId)
     }
