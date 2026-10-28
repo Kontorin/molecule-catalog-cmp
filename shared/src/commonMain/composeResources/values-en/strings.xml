@@ -8,4 +8,6 @@
     <string name="formula">Formula</string>
     <string name="molecular_weight">Molecular weight</string>
     <string name="molecular_properties">Molecular properties</string>
+    <string name="search_by_name">Search by name</string>
+    <string name="nothing_found">Nothing found</string>
 </resources>

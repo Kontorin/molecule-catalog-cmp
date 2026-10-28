@@ -8,4 +8,6 @@
     <string name="formula">Формула</string>
     <string name="molecular_weight">Молекулярная масса</string>
     <string name="molecular_properties">Свойства молекулы</string>
+    <string name="search_by_name">Поиск по названию</string>
+    <string name="nothing_found">Ничего не найдено</string>
 </resources>

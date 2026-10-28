@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,11 +21,14 @@ import kotlinproject.shared.generated.resources.Res
 import kotlinproject.shared.generated.resources.entries_in_catalog
 import kotlinproject.shared.generated.resources.formula
 import kotlinproject.shared.generated.resources.library_title
+import kotlinproject.shared.generated.resources.nothing_found
+import kotlinproject.shared.generated.resources.search_by_name
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CatalogScreen(
     state: CatalogState,
+    onQueryChange: (String) -> Unit,
     onMoleculeClick: (String) -> Unit,
 ) {
     LazyColumn(
@@ -32,6 +36,16 @@ fun CatalogScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        item {
+            OutlinedTextField(
+                value = state.query,
+                onValueChange = onQueryChange,
+                label = { Text(stringResource(Res.string.search_by_name)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
         item {
             Column(modifier = Modifier.padding(bottom = 8.dp)) {
                 Text(
@@ -42,6 +56,15 @@ fun CatalogScreen(
                     text = "${state.molecules.size} ${stringResource(Res.string.entries_in_catalog)}",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
+
+        if (state.molecules.isEmpty()) {
+            item {
+                Text(
+                    text = stringResource(Res.string.nothing_found),
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
         }

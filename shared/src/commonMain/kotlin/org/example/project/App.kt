@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -39,6 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun App() {
     val repository = remember { MockMoleculeRepository() }
+    val catalogViewModel = viewModel { CatalogViewModel(repository) }
     var darkTheme by remember { mutableStateOf(false) }
 
     val configuration = remember {
@@ -94,9 +96,8 @@ fun App() {
                 entryProvider = entryProvider {
                     entry<Route.List> {
                         CatalogScreen(
-                            state = CatalogState(
-                                molecules = repository.getMolecules(),
-                            ),
+                            state = catalogViewModel.state,
+                            onQueryChange = catalogViewModel::onQueryChange,
                             onMoleculeClick = { id ->
                                 backStack.add(Route.Detail(id))
                             },
