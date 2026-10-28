@@ -27,7 +27,7 @@ import kotlinproject.shared.generated.resources.molecular_weight
 import kotlinproject.shared.generated.resources.molecule_not_found
 import kotlinproject.shared.generated.resources.parent_molecule
 import kotlinproject.shared.generated.resources.no_parent_molecule
-import org.jetbrains.compose.resources.stringResource
+import org.example.project.appStringResource as stringResource
 
 @Composable
 fun MoleculeDetailScreen(

@@ -23,7 +23,7 @@ import kotlinproject.shared.generated.resources.formula
 import kotlinproject.shared.generated.resources.library_title
 import kotlinproject.shared.generated.resources.nothing_found
 import kotlinproject.shared.generated.resources.search_by_name
-import org.jetbrains.compose.resources.stringResource
+import org.example.project.appStringResource as stringResource
 
 @Composable
 fun CatalogScreen(
