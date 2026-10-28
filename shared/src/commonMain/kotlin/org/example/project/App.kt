@@ -11,7 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -37,7 +43,11 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinproject.shared.generated.resources.Res
 import kotlinproject.shared.generated.resources.catalog_title
-import kotlinproject.shared.generated.resources.dark_theme
+import kotlinproject.shared.generated.resources.switch_to_dark_theme
+import kotlinproject.shared.generated.resources.switch_to_light_theme
+import kotlinproject.shared.generated.resources.theme_moon
+import kotlinproject.shared.generated.resources.theme_sun
+import org.jetbrains.compose.resources.painterResource
 import kotlinproject.shared.generated.resources.switch_language
 import org.example.project.appStringResource as stringResource
 
@@ -79,11 +89,27 @@ fun App(language: String = "", onLanguageChange: ((String) -> Unit)? = null) {
                                         Text(stringResource(Res.string.switch_language))
                                     }
                                 }
-                                Text(stringResource(Res.string.dark_theme))
-                                Switch(
-                                    checked = darkTheme,
-                                    onCheckedChange = { darkTheme = it },
+                                val themeAction = stringResource(
+                                    if (darkTheme) Res.string.switch_to_light_theme
+                                    else Res.string.switch_to_dark_theme,
                                 )
+                                TooltipBox(
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Below,
+                                    ),
+                                    tooltip = { PlainTooltip { Text(themeAction) } },
+                                    state = rememberTooltipState(),
+                                ) {
+                                    IconButton(onClick = { darkTheme = !darkTheme }) {
+                                        Icon(
+                                            painter = painterResource(
+                                                if (darkTheme) Res.drawable.theme_sun
+                                                else Res.drawable.theme_moon,
+                                            ),
+                                            contentDescription = themeAction,
+                                        )
+                                    }
+                                }
                             }
                         },
                     )
