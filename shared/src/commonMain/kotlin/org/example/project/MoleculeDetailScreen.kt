@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,7 +44,12 @@ fun MoleculeDetailScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         TextButton(onClick = onBack) {
-            Text("← ${stringResource(Res.string.back)}")
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 8.dp),
+            )
+            Text(stringResource(Res.string.back))
         }
 
         if (molecule == null) {
