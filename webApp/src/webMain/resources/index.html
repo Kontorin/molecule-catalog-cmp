@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KotlinProject</title>
     <link type="text/css" rel="stylesheet" href="styles.css">
+    <script>
+        // Compose reads navigator.languages when resolving string resources.
+        const systemLanguages = navigator.languages;
+        let appLanguage = null;
+        Object.defineProperty(navigator, "languages", {
+            get: () => appLanguage ? [appLanguage] : systemLanguages
+        });
+        window.setAppLanguage = function (language) {
+            appLanguage = language;
+            document.documentElement.lang = language;
+            window.dispatchEvent(new Event("languagechange"));
+        };
+    </script>
 </head>
 <body style="text-align: center; align-content: center">
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" role="presentation">

@@ -1,41 +1,97 @@
-This is a Kotlin Multiplatform project targeting Android, Web, Desktop (JVM).
+# Каталог молекул
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Учебное приложение на Kotlin и Compose Multiplatform. Предметная область — химические соединения из ChEMBL. В первой вехе данные берутся из мокового репозитория, сетевых запросов нет.
 
-### Running the apps
+В каталоге можно искать молекулы по названию, открывать их свойства и переходить к родительскому соединению, если оно есть в наборе. Например: NALIDIXATE SODIUM → NALIDIXIC ACID. Кнопка «Назад» возвращает на предыдущий экран.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+Есть светлая и тёмная темы, русский и английский интерфейс. Названия молекул не переводятся. Настройки не сохраняются на диск.
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
-- Web app:
-  - Wasm target (faster, modern browsers): `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
-  - JS target (slower, supports older browsers): `./gradlew :webApp:jsBrowserDevelopmentRun`
+## Запуск Desktop
 
-### Running tests
+Команды выполняются из корня репозитория. Нужна установленная Java; для Gradle в проекте задан JDK 21. При первом запуске Gradle загружает зависимости, поэтому нужен интернет.
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+Windows, PowerShell:
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Desktop tests: `./gradlew :shared:jvmTest`
-- Web tests:
-  - Wasm target: `./gradlew :shared:wasmJsTest`
-  - JS target: `./gradlew :shared:jsTest`
+```powershell
+.\gradlew.bat :desktopApp:run
+```
 
----
+Linux / macOS:
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://kotlinlang.org/compose-multiplatform/),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+```bash
+./gradlew :desktopApp:run
+```
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+## Язык интерфейса
+
+По умолчанию используется локаль системы или браузера. Для английского языка есть перевод, для остальных локалей используются русские строки из основного набора ресурсов. Кнопка EN / RU рядом с кнопкой темы меняет язык интерфейса на Desktop, Android и Web (JS и Wasm). На Desktop меняется также заголовок окна. Выбранный язык хранится только в памяти текущего запуска; на Web сбрасывается после перезагрузки страницы.
+
+Начальный язык также можно выбрать при запуске параметром `appLanguage`.
+
+Windows, PowerShell:
+
+```powershell
+# Английский
+.\gradlew.bat :desktopApp:run -PappLanguage=en
+# Русский
+.\gradlew.bat :desktopApp:run -PappLanguage=ru
+```
+
+Linux / macOS:
+
+```bash
+./gradlew :desktopApp:run -PappLanguage=en
+./gradlew :desktopApp:run -PappLanguage=ru
+```
+
+Параметр передаётся JVM приложения как `user.language` и действует на этот запуск, включая заголовок окна.
+
+## Другие платформы
+
+Web (Wasm):
+
+```powershell
+.\gradlew.bat :webApp:wasmJsBrowserDevelopmentRun
+```
+
+Web (JavaScript):
+
+```powershell
+.\gradlew.bat :webApp:jsBrowserDevelopmentRun
+```
+
+Сборка Android APK (нужен Android SDK):
+
+```powershell
+.\gradlew.bat :androidApp:assembleDebug
+```
+
+Эта команда собирает APK; для запуска установите его на устройство или используйте Android Studio с эмулятором. На Linux / macOS замените `.\gradlew.bat` на `./gradlew`.
+
+## Структура
+
+- `shared` — модели, моковый репозиторий, ViewModel, экраны, навигация, тема и строковые ресурсы.
+- `desktopApp`, `androidApp`, `webApp` — точки входа для платформ.
+- `docs/lab-1` — материалы первой лабораторной работы.
+- `tools/check-strings.py` — проверка совпадения ключей русских и английских строк.
+
+## Проверка
+
+Компиляция Desktop без открытия окна:
+
+```powershell
+.\gradlew.bat :desktopApp:classes
+```
+
+Проверка ключей локализации (нужен Python 3):
+
+```powershell
+python tools/check-strings.py
+```
+
+Ручная проверка:
+
+1. Найти молекулу по части названия; ввести несуществующее название и увидеть «Ничего не найдено».
+2. Открыть NALIDIXATE SODIUM, перейти к родительскому соединению, вернуться по одному экрану до каталога.
+3. Переключить тему, открыть деталь и вернуться.
+4. Запустить приложение на русском и английском, проверить подписи и название окна.

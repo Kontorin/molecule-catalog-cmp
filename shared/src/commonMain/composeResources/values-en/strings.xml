@@ -1,0 +1,17 @@
+<resources>
+    <string name="switch_language">RU</string>
+    <string name="catalog_title">Molecule catalog</string>
+    <string name="library_title">Molecule library</string>
+    <string name="entries_in_catalog">records in this set</string>
+    <string name="switch_to_dark_theme">Switch to dark theme</string>
+    <string name="switch_to_light_theme">Switch to light theme</string>
+    <string name="back">Back</string>
+    <string name="molecule_not_found">Molecule not found</string>
+    <string name="formula">Formula</string>
+    <string name="molecular_weight">Molecular weight</string>
+    <string name="molecular_properties">Molecular properties</string>
+    <string name="search_by_name">Search by name</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="parent_molecule">Parent compound</string>
+    <string name="no_parent_molecule">No separate parent record in the catalog</string>
+</resources>

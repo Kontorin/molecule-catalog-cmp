@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":shared"))
 
     implementation(compose.desktop.currentOs)
+    implementation(libs.compose.components.resources)
     implementation(libs.kotlinx.coroutinesSwing)
 
     implementation(libs.compose.uiToolingPreview)
@@ -18,6 +19,10 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "org.example.project.MainKt"
+
+        providers.gradleProperty("appLanguage").orNull?.let { language ->
+            jvmArgs += "-Duser.language=$language"
+        }
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
