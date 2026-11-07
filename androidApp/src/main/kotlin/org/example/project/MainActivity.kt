@@ -1,5 +1,7 @@
 package org.example.project
 
+import org.example.project.ui.App
+
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity

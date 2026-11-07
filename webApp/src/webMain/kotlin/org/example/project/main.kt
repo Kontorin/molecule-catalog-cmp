@@ -1,5 +1,7 @@
 package org.example.project
 
+import org.example.project.ui.App
+
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import androidx.compose.runtime.getValue
